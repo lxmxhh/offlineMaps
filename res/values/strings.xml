@@ -10,7 +10,7 @@
     <string name="search_label">Place Name</string>
     <string name="search_hint">e.g., Taipei</string>
     
-    <string name="app_name">NewZealand</string>
+    <string name="app_name">*NZTravelGuide*</string>
     
     <string name="YES_LABEL">Yes</string>
     <string name="NO_LABEL">No</string>
@@ -76,9 +76,10 @@
     
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} km, {1} tile(s) / {2} KB</string>
     
-    <string name="ABOUT_TITLE">Big Planet Tracks</string>
+    <string name="ABOUT_TITLE">NZ Travel Guide</string>
     <string name="ABOUT_MESSAGE">
-Big Planet Tracks is an online/offline maps application that can import, export and record your GPS tracks, and shows live/real-time statistics such as time, speed, distance, and elevation.\n
+NZ Travel Guide is an online/offline maps application that can import, export and record your GPS tracks, and shows live/real-time statistics such as time, speed, distance, and elevation.\n
+NZ Travel Guide is developed based on BPT v2, by xuhong.\n
 \n
 Big Planet Tracks v2 series\n
 (Enhanced offline maps and GPS tracking tool)\n

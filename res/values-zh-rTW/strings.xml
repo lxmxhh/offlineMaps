@@ -10,7 +10,7 @@
     <string name="search_label">地點</string>
     <string name="search_hint">例如，台北</string>
     
-    <string name="app_name">*紐西蘭*</string>
+    <string name="app_name">*紐西蘭導遊*</string>
     
     <string name="YES_LABEL">是</string>
     <string name="NO_LABEL">否</string>
@@ -76,9 +76,10 @@
     
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} 公里\n{1} 地圖區塊檔 / {2} KB</string>
     
-    <string name="ABOUT_TITLE">Big Planet Tracks\n*星跡地圖*</string>
+    <string name="ABOUT_TITLE">Big Planet Tracks\n*紐西蘭導遊*</string>
     <string name="ABOUT_MESSAGE">
-*星跡地圖* 是一款實用的線上, 離線地圖程式, 能匯入, 匯出與記錄 GPS 軌跡, 並即時顯示時間, 速度, 距離, 海拔等統計數據。\n
+*紐西蘭導遊* 是一款實用的線上, 離線地圖程式, 能匯入, 匯出與記錄 GPS 軌跡, 並即時顯示時間, 速度, 距離, 海拔等統計數據。\n
+基於Big Planet Tracks v2開發。開發者: xuhong\n
 \n
 Big Planet Tracks v2 系列\n
 (加強版離線地圖及 GPS 軌跡記錄器)\n
