@@ -130,7 +130,7 @@ public class NZTravelGuide extends Activity {
 	public static String SearchAction = "tyt.android.bigplanettracks.INTENTS.GOTO";
 	public static String UpdateScreenAction = "tyt.android.bigplanettracks.INTENTS.UpdateScreen";
 	
-	private static RelativeLayout mAutoFollowRelativeLayout;
+
 	private RelativeLayout mTrackRelativeLayout;
 	private static ImageView scaleImageView;
 	private Point myGPSOffset;
@@ -225,8 +225,7 @@ public class NZTravelGuide extends Activity {
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			
 			SmoothZoomEngine.stop = false;
-			mAutoFollowRelativeLayout = getAutoFollowRelativeLayout();
-			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
+
 			mTrackRelativeLayout = getTrackRelativeLayout();
 			mTrackRelativeLayout.setVisibility(View.VISIBLE);
 			
@@ -249,9 +248,7 @@ public class NZTravelGuide extends Activity {
 			}
 			
 			initializeMap();
-			
-			/* Create an ImageView with a auto-follow icon. */
-			mapControl.addView(mAutoFollowRelativeLayout); // We can just run it once.
+
 			/* Create an ImageView with a Track icon. */
 			mapControl.addView(mTrackRelativeLayout); // We can just run it once.
 			/* Create an ImageView with a scale image. */
@@ -279,7 +276,7 @@ public class NZTravelGuide extends Activity {
 	public static void disabledAutoFollow(Context context) {
 		if (isFollowMode) {
 			Toast.makeText(context, R.string.auto_follow_disabled, Toast.LENGTH_SHORT).show();
-			mAutoFollowRelativeLayout.setVisibility(View.VISIBLE);
+			//mAutoFollowRelativeLayout.setVisibility(View.VISIBLE);
 			isFollowMode = false;
 		}
 		setActivityTitle((Activity) context);
@@ -288,10 +285,7 @@ public class NZTravelGuide extends Activity {
 	public void enabledAutoFollow(Context context) {
 		if (!isFollowMode) {
 			Toast.makeText(context, R.string.auto_follow_enabled, Toast.LENGTH_SHORT).show();
-			if (mAutoFollowRelativeLayout == null) {
-				mAutoFollowRelativeLayout = getAutoFollowRelativeLayout();
-			}
-			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
+
 			if (currentLocation != null)
 				goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
 			isFollowMode = true;
@@ -350,12 +344,17 @@ public class NZTravelGuide extends Activity {
 
 	private ImageView ivRecordTrack;
 	
+	private ImageView ivGotoCHC;
+	
 	private RelativeLayout getTrackRelativeLayout() {
 		final RelativeLayout relativeLayout = new RelativeLayout(this);
 		
 		/* Create a ImageView with a track icon. */
 		ivRecordTrack = new ImageView(this);
 		ivRecordTrack.setImageResource(R.drawable.btn_record_start);
+		
+		ivGotoCHC = new ImageView(this);
+		ivGotoCHC.setImageResource(R.drawable.autofollow);
 		
 		ivRecordTrack.setOnClickListener(new OnClickListener(){
 			@Override
@@ -364,15 +363,36 @@ public class NZTravelGuide extends Activity {
 			}
 		});
 		
-		/* Create RelativeLayoutParams, that position in in the bottom right corner. */
+		ivGotoCHC.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				goToCHC();
+			}
+		});
+		/* Create RelativeLayoutParams, that position in in the bottom left corner. */
 		final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		relativeLayout.addView(ivRecordTrack, params);
+
+		
+		/* Create RelativeLayoutParams, that position in in the bottom right corner. */
+		final RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		params1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		relativeLayout.addView(ivGotoCHC, params1);
 		
 		return relativeLayout;
+	}
+	
+	private void goToCHC() {
+		disabledAutoFollow(this);
+
+		goToMyLocation(Const.CONST_CHC_LAT, Const.CONST_CHC_LONG, Const.DEFAULT_ZOOM_LEVEL);
 	}
 
 	private void toggleTrackButton() {
@@ -539,7 +559,6 @@ public class NZTravelGuide extends Activity {
 				
 				// for BigPlanet.addMarkersForDrawing() only
 				if (type == 2) {
-					mAutoFollowRelativeLayout.setVisibility(View.VISIBLE);
 					isFollowMode = false;
 				}
 				
@@ -598,11 +617,6 @@ public class NZTravelGuide extends Activity {
 			} else{
 				ivRecordTrack.setImageResource(R.drawable.btn_record_start);
 			}
-			if (isFollowMode){
-				mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
-			} else{
-				mAutoFollowRelativeLayout.setVisibility(View.VISIBLE);
-			}
 		}
 	}
 	
@@ -633,7 +647,6 @@ public class NZTravelGuide extends Activity {
 		SmoothZoomEngine.sze = null; // release the variable
 		SmoothZoomEngine.stop = true; // stop the thread
 		TileLoader.stop = true; // stop the thread
-		mAutoFollowRelativeLayout = null;
 		if (searchIntentReceiver != null) {
 			unregisterReceiver(searchIntentReceiver);
 			Preferences.putTile(mapControl.getPhysicalMap().getDefaultTile());

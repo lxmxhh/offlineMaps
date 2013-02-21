@@ -2,6 +2,8 @@ package sam.android.nztravelguide;
 
 
 public class Const {
+	static final int    DEFAULT_ZOOM_LEVEL = 6;
+	
 	static final double CONST_CHC_LAT = -43.532;
 	static final double CONST_CHC_LONG = 172.636; 
 
