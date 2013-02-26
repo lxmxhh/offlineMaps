@@ -73,34 +73,34 @@ public class NZTravelGuideTracks extends TabActivity implements OnTouchListener 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_LEFT_ICON);
+		//requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		
 		// R.drawable.globe won't appear but needed
-		final TabHost tabHost = getTabHost();
-		tabHost.addTab(tabHost.newTabSpec("tab1")
-			.setIndicator("Map", getResources().getDrawable(R.drawable.globe))
-			.setContent(new Intent(this, NZTravelGuide.class)));
-		tabHost.addTab(tabHost.newTabSpec("tab2")
-			.setIndicator("Stats", getResources().getDrawable(R.drawable.globe))
-			.setContent(new Intent(this, StatsActivity.class)));
+//		final TabHost tabHost = getTabHost();
+//		tabHost.addTab(tabHost.newTabSpec("tab1")
+//			.setIndicator("Map", getResources().getDrawable(R.drawable.globe))
+//			.setContent(new Intent(this, NZTravelGuide.class)));
+//		tabHost.addTab(tabHost.newTabSpec("tab2")
+//			.setIndicator("Stats", getResources().getDrawable(R.drawable.globe))
+//			.setContent(new Intent(this, StatsActivity.class)));
 		
 		// Hide the tab widget itself. We'll use overlayed prev/next buttons to
 		// switch between the tabs:
-		tabHost.getTabWidget().setVisibility(View.GONE);
+		//tabHost.getTabWidget().setVisibility(View.GONE);
 
-		RelativeLayout layout = new RelativeLayout(this);
-		LayoutParams params = new LayoutParams(
-				LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
-		layout.setLayoutParams(params);
-		navControls = new NavControls(this, layout, prevActivity, nextActivity);
-		navControls.setLeftIcon(icons[NUM_TABS - 1]);
-		navControls.setRightIcon(icons[1]);
-		navControls.show();
-		tabHost.addView(layout);
-		layout.setOnTouchListener(this);
+//		RelativeLayout layout = new RelativeLayout(this);
+//		LayoutParams params = new LayoutParams(
+//				LayoutParams.FILL_PARENT,
+//				LayoutParams.FILL_PARENT);
+//		layout.setLayoutParams(params);
+//		navControls = new NavControls(this, layout, prevActivity, nextActivity);
+//		navControls.setLeftIcon(icons[NUM_TABS - 1]);
+//		navControls.setRightIcon(icons[1]);
+//		navControls.show();
+//		tabHost.addView(layout);
+//		layout.setOnTouchListener(this);
 		
-		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.globe);
+//		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.globe);
 		
 		NZTravelGuide.titleHandler = handler;
 	}

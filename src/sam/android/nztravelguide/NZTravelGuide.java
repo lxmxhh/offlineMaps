@@ -76,11 +76,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -92,6 +96,17 @@ import android.widget.Toast;
 public class NZTravelGuide extends Activity {
 
 	private static final String BOOKMARK_DATA = "bookmark";
+	private static final double[][] CITIES_LOC = {
+		{Const.CONST_CHC_LAT, Const.CONST_CHC_LONG},
+		{Const.CONST_GREYM_LAT,Const.CONST_GREYM_LONG},
+		{Const.CONST_FOX_LAT,Const.CONST_FOX_LONG},
+		{Const.CONST_WANAKA_LAT,Const.CONST_WANAKA_LONG},
+		{Const.CONST_QST_LAT,Const.CONST_QST_LONG},
+		{Const.CONST_TEANAU_LAT,Const.CONST_TEANAU_LONG},
+		{Const.CONST_MILFORD_LAT,Const.CONST_MILFORD_LONG},
+		{Const.CONST_TEKAPO_LAT,Const.CONST_TEKAPO_LONG}
+	};
+
 	private static int SEARCH_ZOOM = 2;
 
 	private Toast textMessage;
@@ -132,6 +147,7 @@ public class NZTravelGuide extends Activity {
 	
 
 	private RelativeLayout mTrackRelativeLayout;
+	private View mCitySpinner;
 	private static ImageView scaleImageView;
 	private Point myGPSOffset;
 	private Point previousGPSOffset = new Point();;
@@ -229,6 +245,9 @@ public class NZTravelGuide extends Activity {
 			mTrackRelativeLayout = getTrackRelativeLayout();
 			mTrackRelativeLayout.setVisibility(View.VISIBLE);
 			
+			mCitySpinner = RelativeLayout.inflate(this, R.layout.cities, null);
+
+			
 			File trackImportFolder = new File(SQLLocalStorage.TRACK_IMPORT_PATH);
 			if (!trackImportFolder.exists())
 				trackImportFolder.mkdirs();
@@ -255,6 +274,33 @@ public class NZTravelGuide extends Activity {
 			scaleImageView = new ImageView(this);
 			scaleImageView.setImageResource(R.drawable.scale1);
 			mapControl.addView(scaleImageView);
+			mapControl.addView(mCitySpinner);
+			
+			
+			Spinner spinner = (Spinner)findViewById(R.id.spinner1);
+			if( spinner != null ){
+				//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.array.cities);
+				ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cities, android.R.layout.simple_spinner_item);
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				
+				spinner.setAdapter(adapter);
+				spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+							int position, long id) {
+						// TODO Auto-generated method stub
+						goToCity(position);
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+				});
+			}
 			
 			if (!Utils.verify(identifier)) {
 				showTrialDialog(R.string.this_is_demo_title, R.string.this_is_demo_message);
@@ -379,20 +425,27 @@ public class NZTravelGuide extends Activity {
 
 		
 		/* Create RelativeLayoutParams, that position in in the bottom right corner. */
-		final RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(
+		final RelativeLayout.LayoutParams layoutchc = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		params1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		relativeLayout.addView(ivGotoCHC, params1);
+		layoutchc.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		layoutchc.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		relativeLayout.addView(ivGotoCHC, layoutchc);
 		
 		return relativeLayout;
 	}
 	
 	private void goToCHC() {
 		disabledAutoFollow(this);
-
-		goToMyLocation(Const.CONST_CHC_LAT, Const.CONST_CHC_LONG, Const.DEFAULT_ZOOM_LEVEL);
+		goToLocation(CITIES_LOC[0][0], CITIES_LOC[0][1], Const.DEFAULT_ZOOM_LEVEL);
+	}
+	
+	private void goToCity(int n) {
+		disabledAutoFollow(this);
+		if(n<0 || n>=CITIES_LOC.length) {
+			return;
+		}
+		goToLocation(CITIES_LOC[n][0], CITIES_LOC[n][1], PhysicMap.getZoomLevel());
 	}
 
 	private void toggleTrackButton() {
@@ -971,6 +1024,22 @@ public class NZTravelGuide extends Activity {
 		goToMyLocation(lat, lon, zoom);
 	}
 	
+	/*
+	 * Diff with gotomylocation, not make a directional marker
+	 */
+	public void goToLocation(double lat, double lon, int zoom) {
+		double latFix = lat + myGPSOffset.y*Math.pow(10, -5);
+		double lonFix = lon + myGPSOffset.x*Math.pow(10, -5);
+		sam.android.nztravelguide.maps.geoutils.Point p = GeoUtils.toTileXY(latFix, lonFix, zoom);
+		sam.android.nztravelguide.maps.geoutils.Point off = GeoUtils.getPixelOffsetInTile(latFix, lonFix, zoom);
+		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
+		
+		Place place = new Place();
+		place.setLat(latFix);
+		place.setLon(lonFix);
+		mm.addMarker(place, zoom, MarkerManager.DrawMarkerOrTrack, MarkerManager.BOOKMARK_MARKER);
+	}
+	
 	private void goToMyLocation(double lat, double lon, int zoom) {
 		double latFix = lat + myGPSOffset.y*Math.pow(10, -5);
 		double lonFix = lon + myGPSOffset.x*Math.pow(10, -5);
@@ -999,13 +1068,17 @@ public class NZTravelGuide extends Activity {
 	}
 	
 	private void addMarker(Location location, int zoom) {
+		addMarker(location, zoom, MarkerManager.BOOKMARK_MARKER);
+	}
+	
+	private void addMarker(Location location, int zoom, int imageType) {
 		double latFix = location.getLatitude() + myGPSOffset.y*Math.pow(10, -5);;
 		double lonFix = location.getLongitude() + myGPSOffset.x*Math.pow(10, -5);
 		Place place = new Place();
 		place.setLat(latFix);
 		place.setLon(lonFix);
 		place.setLocation(location);
-		mm.addMarker(place, zoom, MarkerManager.DrawMarkerOrTrack, MarkerManager.MY_LOCATION_MARKER);
+		mm.addMarker(place, zoom, MarkerManager.DrawMarkerOrTrack, imageType);
 	}
 	
 	public static void addMarkersForDrawing(Context context, List<Place> placeList, int trackType) {

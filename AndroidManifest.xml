@@ -7,16 +7,14 @@
 	<application android:name="sam.android.nztravelguide.maps.NZTravelGuideApp" android:debuggable="false"
 		android:icon="@drawable/globe" android:label="@string/app_name">
 		
-		<activity android:name=".NZTravelGuideTracks" android:launchMode="singleTop">
+		<activity android:configChanges="keyboardHidden|orientation" 
+		    android:name=".NZTravelGuideTracks" android:launchMode="singleTop" />
+
+		<activity android:name=".NZTravelGuide" android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-		</activity>
-
-		<activity android:configChanges="keyboardHidden|orientation"
-			android:name=".NZTravelGuide" android:launchMode="singleTop">
-			<meta-data android:name="android.app.default_searchable" android:value=".FindPlace" />
 		</activity>
 		
 		<activity android:configChanges="keyboardHidden|orientation" 

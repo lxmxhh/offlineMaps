@@ -6,4 +6,15 @@
         <item>2.5</item>
         <item>3.0</item>
     </string-array>
+    
+    <string-array name="cities">
+        <item>CHC</item>
+        <item>Greymouth</item>
+        <item>Fox Glacier</item>
+        <item>Wanaka</item>
+        <item>Queenstown</item>
+        <item>Te Anau</item>
+        <item>Milford</item>
+        <item>Lake Tekapo</item>
+    </string-array>
 </resources>
