@@ -4,7 +4,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 
 /**
- * Предназначен для обработки двойного клика
+ * Designed to handle a double click
  * 
  * @author hudvin
  * 
@@ -12,24 +12,24 @@ import android.view.MotionEvent;
 public class DoubleClickDetector {
 
 	/**
-	 * Минимальный временной промежуток между двумя отдельными касаниями, при
-	 * котором они воспринимаются как двойное касание
+	 * The minimum time interval between two separate touches, 
+	 * in which they are perceived as double-tap
 	 */
 	private static int CLICK_INTERVAL = 600;
 
 	/**
-	 * Максимальное расстояние между касаниями, при котором они воспринимаются
-	 * как двойное
+	 * The maximum distance between touches, 
+	 * in which they are perceived as a double-tap
 	 */
 	private static int CLICK_PRECISE = 12;
 
 	/**
-	 * Хранит предыдущее событие
+	 * Stores the previous event
 	 */
 	private Point previousPoint;
 
 	/**
-	 * Хранит время предыдущего события
+	 * Keeps the previous events
 	 */
 	private long eventTime;
 	
@@ -58,7 +58,7 @@ public class DoubleClickDetector {
 	}
 
 	/**
-	 * Проверяет, находится ли первая точка вблизи второй
+	 * Checks whether the first point near the second
 	 * 
 	 * @param event
 	 * @return

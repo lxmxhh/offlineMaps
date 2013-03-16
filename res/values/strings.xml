@@ -115,4 +115,10 @@ Please visit \"Dr. TYT \'s Android Map\" for more info.\n{url}
     <string name="clearSaveTrackFales">Please stop recording the track first.</string>
     <string name="notify_recording">Recording your track...</string>
     
+    <string name="not_support_gps">not support gps</string>
+    <string name="not_support_network">not support network</string>
+    
+    <string name="enable_gps">enable_gps</string>
+    <string name="enable_gps_dialog">enable_gps_dialog</string>
+    
 </resources>

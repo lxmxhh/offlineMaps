@@ -25,7 +25,7 @@ public class Const {
 	static final double CONST_QST_LAT = -45.0315;
 	static final double CONST_QST_LONG = 168.66;
 	
-	static final double CONST_TEANAU_LAT = -45.4237;
+	static final double CONST_TEANAU_LAT = -45.4111;
 	static final double CONST_TEANAU_LONG = 167.717;
 	
 	static final double CONST_MILFORD_LAT = -44.6734;
@@ -36,4 +36,28 @@ public class Const {
 	
 	static final double CONST_TEKAPO_LAT = -44.007;
 	static final double CONST_TEKAPO_LONG = 170.482;
+	
+	static final double HOTEL_CHC_LAT = -43.49806215632379;
+	static final double HOTEL_CHC_LONG = 172.5617434;
+	
+	static final double HOTEL_GREYM_LAT = -42.45971462015321;
+	static final double HOTEL_GREYM_LONG = 171.1994642;
+	
+	static final double HOTEL_FOX_LAT = -43.466191768118904;
+	static final double HOTEL_FOX_LONG = 170.01834114921272;
+	
+	static final double HOTEL_WANAKA_LAT = -44.70244710132575;
+	static final double HOTEL_WANAKA_LONG = 169.1244553;
+	
+	static final double HOTEL_QST_LAT = -45.0169598452256;
+	static final double HOTEL_QST_LONG = 168.7180461;
+	
+	static final double HOTEL_TEANAU_LAT = -45.418708272872074;
+	static final double HOTEL_TEANAU_LONG = 167.7176455;
+	
+	static final double HOTEL_FRANKTON_LAT = -45.01551674226305;
+	static final double HOTEL_FRANKTON_LONG = 168.7294311;
+	
+	static final double HOTEL_TEKAPO_LAT = -44.00674518969982;
+	static final double HOTEL_TEKAPO_LONG = 170.4869623;
 }

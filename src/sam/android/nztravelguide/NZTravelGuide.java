@@ -63,6 +63,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Layout;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Display;
@@ -78,6 +79,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -105,6 +107,17 @@ public class NZTravelGuide extends Activity {
 		{Const.CONST_TEANAU_LAT,Const.CONST_TEANAU_LONG},
 		{Const.CONST_MILFORD_LAT,Const.CONST_MILFORD_LONG},
 		{Const.CONST_TEKAPO_LAT,Const.CONST_TEKAPO_LONG}
+	};
+	
+	private static final double[][] HOTEL_LOC = {
+		{Const.HOTEL_CHC_LAT, Const.HOTEL_CHC_LONG},
+		{Const.HOTEL_GREYM_LAT, Const.HOTEL_GREYM_LONG},
+		{Const.HOTEL_FOX_LAT, Const.HOTEL_FOX_LONG},
+		{Const.HOTEL_WANAKA_LAT, Const.HOTEL_WANAKA_LONG},
+		{Const.HOTEL_QST_LAT, Const.HOTEL_QST_LONG},
+		{Const.HOTEL_TEANAU_LAT, Const.HOTEL_TEANAU_LONG},
+		{Const.HOTEL_FRANKTON_LAT, Const.HOTEL_FRANKTON_LONG},
+		{Const.HOTEL_TEKAPO_LAT, Const.HOTEL_TEKAPO_LONG},
 	};
 
 	private static int SEARCH_ZOOM = 2;
@@ -142,8 +155,8 @@ public class NZTravelGuide extends Activity {
 	
 	private MySearchIntentReceiver searchIntentReceiver;
 	private MyUpdateScreenIntentReceiver updateScreenIntentReceiver;
-	public static String SearchAction = "tyt.android.bigplanettracks.INTENTS.GOTO";
-	public static String UpdateScreenAction = "tyt.android.bigplanettracks.INTENTS.UpdateScreen";
+	public static String SearchAction = "sam.android.nztravelguide.INTENTS.GOTO";
+	public static String UpdateScreenAction = "sam.android.nztravelguide.INTENTS.UpdateScreen";
 	
 
 	private RelativeLayout mTrackRelativeLayout;
@@ -339,31 +352,6 @@ public class NZTravelGuide extends Activity {
 		setActivityTitle((Activity) context);
 	}
 	
-	private RelativeLayout getAutoFollowRelativeLayout() {
-		final RelativeLayout relativeLayout = new RelativeLayout(this);
-		
-		/* Create an ImageView with a auto-follow icon. */
-		final ImageView ivAutoFollow = new ImageView(this);
-		ivAutoFollow.setImageResource(R.drawable.autofollow);
-		
-		ivAutoFollow.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				enabledAutoFollow(NZTravelGuide.this);
-			}
-		});
-		
-		/* Create RelativeLayoutParams, that position in in the bottom right corner. */
-		final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.WRAP_CONTENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		relativeLayout.addView(ivAutoFollow, params);
-		
-		return relativeLayout;
-	}
-	
 	private void enabledTrack(Context context) {
 		if (isGPSTracking) {
 			MarkerManager.savedTrackG.clear();
@@ -392,6 +380,8 @@ public class NZTravelGuide extends Activity {
 	
 	private ImageView ivGotoCHC;
 	
+	private ImageView ivCenterImageView;
+	
 	private RelativeLayout getTrackRelativeLayout() {
 		final RelativeLayout relativeLayout = new RelativeLayout(this);
 		
@@ -401,6 +391,9 @@ public class NZTravelGuide extends Activity {
 		
 		ivGotoCHC = new ImageView(this);
 		ivGotoCHC.setImageResource(R.drawable.autofollow);
+		
+		ivCenterImageView = new ImageView(this);
+		ivCenterImageView.setImageResource(R.drawable.cross);
 		
 		ivRecordTrack.setOnClickListener(new OnClickListener(){
 			@Override
@@ -413,6 +406,7 @@ public class NZTravelGuide extends Activity {
 			@Override
 			public void onClick(View v) {
 				goToCHC();
+				setupHotelMarker();
 			}
 		});
 		/* Create RelativeLayoutParams, that position in in the bottom left corner. */
@@ -431,6 +425,14 @@ public class NZTravelGuide extends Activity {
 		layoutchc.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		layoutchc.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		relativeLayout.addView(ivGotoCHC, layoutchc);
+		
+		/* Create RelativeLayoutParams, that position in in the bottom right corner. */
+		final RelativeLayout.LayoutParams layoutcenter = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		layoutcenter.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		layoutcenter.addRule(RelativeLayout.CENTER_VERTICAL);
+		relativeLayout.addView(ivCenterImageView, layoutcenter);
 		
 		return relativeLayout;
 	}
@@ -645,7 +647,9 @@ public class NZTravelGuide extends Activity {
 
 	@Override
 	public boolean onSearchRequested() {
-		startSearch("", false, null, false);
+		//startSearch("", false, null, false);
+		//get location show
+		Toast.makeText(this, "aaa", Toast.LENGTH_LONG).show();
 		return true;
 	}
 
@@ -763,7 +767,7 @@ public class NZTravelGuide extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		SubMenu sub;
-		
+
 		menu.add(1, 11, 0, R.string.SEARCH_MENU).setIcon(R.drawable.search);
 
 		boolean hasSavedTracksG = checkMarkers(MarkerManager.savedTrackG);
@@ -1038,6 +1042,16 @@ public class NZTravelGuide extends Activity {
 		place.setLat(latFix);
 		place.setLon(lonFix);
 		mm.addMarker(place, zoom, MarkerManager.DrawMarkerOrTrack, MarkerManager.BOOKMARK_MARKER);
+	}
+	
+	public void setupHotelMarker() {
+		for(int i=0;i<8;i++){
+			Place p = new Place();
+			p.setLat(HOTEL_LOC[i][0]);
+			p.setLon(HOTEL_LOC[i][1]);
+
+			mm.addMarker(p, PhysicMap.getZoomLevel(), MarkerManager.DrawMarkerOrTrack, MarkerManager.BOOKMARK_MARKER);
+		}
 	}
 	
 	private void goToMyLocation(double lat, double lon, int zoom) {

@@ -114,5 +114,10 @@ Big Planet 1.2.4\n
     
     <string name="clearSaveTrackFales">请先停止记录轨迹</string>
     <string name="notify_recording">正在记录轨迹...</string>
+
+    <string name="not_support_gps">not support gps</string>
+    <string name="not_support_network">not support network</string>
     
+    <string name="enable_gps">enable_gps</string>
+    <string name="enable_gps_dialog">enable_gps_dialog</string>
 </resources>
