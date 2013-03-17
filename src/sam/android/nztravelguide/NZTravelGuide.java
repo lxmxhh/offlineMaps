@@ -63,7 +63,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Layout;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Display;
@@ -79,7 +78,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -813,7 +811,8 @@ public class NZTravelGuide extends Activity {
 		hideMessage();
 		switch (item.getItemId()) {
 		case 11:
-			showSearch();
+			//showSearch();
+			showGps();
 			break;
 		case 21:
 			switchToBookmarkMode();
@@ -1212,6 +1211,12 @@ public class NZTravelGuide extends Activity {
 
 	private void showSearch() {
 		onSearchRequested();
+	}
+	
+	private void showGps() {
+		Intent intent = new Intent();
+		intent.setClass(NZTravelGuide.this, LocationViewer.class);
+		startActivity(intent);
 	}
 
 	private void showAbout() {

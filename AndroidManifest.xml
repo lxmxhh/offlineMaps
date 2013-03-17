@@ -34,6 +34,8 @@
 		
 		<activity android:name="sam.android.nztravelguide.tracks.TrackTabViewActivity"/>
 		
+		<activity android:name="sam.android.nztravelguide.LocationViewer" />
+		
 		<service android:name="sam.android.nztravelguide.MyLocationService" android:enabled="true"/>
 	
 	</application>
